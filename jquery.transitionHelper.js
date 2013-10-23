@@ -67,9 +67,13 @@
 	$.fn.transitionHelper = function (callback, off) {
 		callback = callback || function () {};
 		if (EVENTS.transitionend){
-			return (off ? this.off : this.one).call(this, EVENTS.transitionend + '.transitionHelper', function () {
-				$(this).removeClass('transition-helper');
-				callback.call(this);
+			return (off ? this.off : this.on).call(this, EVENTS.transitionend + '.transitionHelper', function (ev) {
+				//ignore events bubbling from descendants
+				if (ev.target !== this) {
+					return ;
+				}
+				$(this).off(EVENTS.transitionend + '.transitionHelper').removeClass('transition-helper');
+				callback.call(this, ev);
 			}).toggleClass('transition-helper', !off);
 		} else {
 			callback.call(this);
