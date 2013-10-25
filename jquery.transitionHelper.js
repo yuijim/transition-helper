@@ -1,4 +1,4 @@
-/*! jQuery.transitionHelper, v0.1 | MIT */
+/*! jQuery.transitionHelper, v0.2 | MIT */
 /**
  * @fileOverview Micro plugin to help with CSS transitions
  *
@@ -61,24 +61,40 @@
 				'OTransition'      : 'oTransitionEnd otransitionend',
 				'msTransition'     : 'MSTransitionEnd',
 				'transition'       : 'transitionend'
-			}[ Modernizr.prefixed('transition') ]
+			}[ Modernizr.prefixed('transition') ],
+
+			animationend: {
+				'WebkitAnimation' : 'webkitAnimationEnd',
+				'MozAnimation'    : 'animationend',
+				'OAnimation'      : 'oAnimationEnd oanimationend',
+				'msAnimation'     : 'MSAnimationEnd',
+				'animation'       : 'animationend'
+			}[ Modernizr.prefixed('animation') ]
 		};
 
-	$.fn.transitionHelper = function (callback, off) {
+	var helper = function (event, callback, off) {
 		callback = callback || function () {};
-		if (EVENTS.transitionend){
-			return (off ? this.off : this.on).call(this, EVENTS.transitionend + '.transitionHelper', function (ev) {
+		if (EVENTS[event]){
+			return (off ? this.off : this.on).call(this, EVENTS[event] + '.transitionHelper', function (ev) {
 				//ignore events bubbling from descendants
 				if (ev.target !== this) {
 					return ;
 				}
-				$(this).off(EVENTS.transitionend + '.transitionHelper').removeClass('transition-helper');
+				$(this).off(EVENTS[event] + '.transitionHelper').removeClass('transition-helper');
 				callback.call(this, ev);
 			}).toggleClass('transition-helper', !off);
 		} else {
 			callback.call(this);
 			return this;
 		}
+	};
+
+	$.fn.transitionHelper = function (callback, off) {
+		return helper.call(this, 'transitionend', callback, off);
+	};
+
+	$.fn.animationHelper = function (callback, off) {
+		return helper.call(this, 'animationend', callback, off);
 	};
 
 }(jQuery, this));
