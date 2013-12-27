@@ -1,4 +1,4 @@
-/*! jQuery.transitionHelper, v0.2 | MIT */
+/*! jQuery.transitionHelper, v0.3 | MIT */
 /**
  * @fileOverview Micro plugin to help with CSS transitions
  *
@@ -50,7 +50,18 @@
  * @see <a href="http://modernizr.com/docs/#prefixed">Modernizr.prefixed() Docs</a>
  */
 
-;(function ($, window, undefined) {
+(function (factory) {
+    if ( typeof define === 'function' && define.amd ) {
+        // AMD. Register as an anonymous module.
+        define(['jquery', 'modernizr'], factory);
+    } else if (typeof exports === 'object') {
+        // Node/CommonJS style for Browserify
+        module.exports = factory;
+    } else {
+        // Browser globals
+        factory(jQuery, Modernizr);
+    }
+}(function ($, Modernizr) {
 
 	"use strict";
 
@@ -97,4 +108,4 @@
 		return helper.call(this, 'animationend', callback, off);
 	};
 
-}(jQuery, this));
+}));
