@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jQuery.transitionHelper</title>
+    <meta charset="UTF-8">
+    <style>
+    /* Base Page Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font: 12px "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, Tahoma, sans-serif;
+      color: #333;
+      background: #fff;
+    }
+
+    h2, h3 {
+      margin: 20px 25px 10px;
+    }
+
+    h4 {
+      margin: 0 0 10px 0;
+    }
+
+    p, ul {
+      padding: 0;
+      margin: 10px 25px;
+    }
+
+    .demo p,
+    .demo ul {
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    ul {
+      padding-left: 2em;
+    }
+
+    code {
+      padding: 2px 4px;
+      background: #eee;
+      border-radius: 2px;
+    }
+
+    pre,
+    .demo {
+      padding: 10px;
+      margin: 10px 25px;
+      border: 1px solid #ccc;
+      border-radius: 2px;
+    }
+
+    pre {
+      background: #eee;
+    }
+
+    pre code {
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+    }
+    </style>
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="../bower_components/modernizr/modernizr.js"></script>
+
+    <script src="../jquery.transitionHelper.js"></script>
+
+  </head>
+  <body>
+    <h2>jQuery.transitionHelper</h2>
+    <p>Tiny jQuery- &amp; Modernizr-dependent plugin helping with simple CSS transitions &amp; animations.</p>
+
+    <h3>transitionHelper</h3>
+    <p>Simple examples illustrating <code>transitionend</code> callback.</p>
+    <p><strong>Warning:</strong> If you have multiple transitions on element, callback will only fire for the one that finishes first.</p>
+    <style>
+      #demo-1,
+      #demo-2 {
+        padding: 30px 0;
+        width: 20%;
+        text-align: center;
+        background: #c00;
+        color: #fff;
+        text-shadow: 1px 1px 1px #333;
+        cursor: pointer;
+      }
+
+      #demo-1 {
+        -webkit-transition: width 0.5s ease-in-out;
+        transition: width 0.5s ease-in-out;
+      }
+      #demo-1.active {
+        width: 100%;
+      }
+
+      #demo-2 {
+        -webkit-transition: width 0.5s ease-in-out, color 0.2s ease-in-out;
+        transition: width 0.5s ease-in-out, color 0.2s ease-in-out;
+      }
+      #demo-2.active {
+        width: 100%;
+        color: #333;
+        text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+      }
+
+      #demo-1.transition-helper,
+      #demo-2.transition-helper {
+        background: #0c0;
+      }
+    </style>
+    <script>
+      $(function(){
+        $('#demo-1').on('click', function () {
+          $(this).transitionHelper(function () {
+            alert('#demo-1 state changed');
+          }).toggleClass('active');
+        });
+      });
+    </script>
+    <div class="demo">
+      <h4>Simple <code>width</code> property transition</h4>
+      <div id="demo-1">Click Me</div>
+    </div>
+    <script>
+      $(function(){
+        $('#demo-2').on('click', function () {
+          $(this).transitionHelper(function () {
+            alert('#demo-2 state changed');
+          }).toggleClass('active');
+        });
+      });
+    </script>
+    <div class="demo">
+      <h4><code>width</code> &amp; <code>color</code> property transition</h4>
+      <p>Since <code>color</code> transition is shorter, callback will fire after it &amp; <code>.transition-helper</code> class will be removed.</hp>
+      <div id="demo-2">Click Me</div>
+    </div>
+
+    <h3>animationHelper</h3>
+    <p>Simple example illustrating <code>animationend</code> callback.</p>
+    <p><strong>Warning:</strong> If you have multiple animations on element, callback will only fire for the one that finishes first.</p>
+    <style>
+      @-webkit-keyframes widthAnim {
+        from { width: 20%; }
+        to { width: 100%; }
+      }
+      @keyframes widthAnim {
+        from { width: 20%; }
+        to { width: 100%; }
+      }
+
+      #demo-3 {
+        padding: 30px 0;
+        width: 20%;
+        text-align: center;
+        background: #00c;
+        color: #fff;
+        text-shadow: 1px 1px 1px #333;
+        cursor: pointer;
+        -webkit-animation-duration: 0.5s;
+        animation-duration: 0.5s;
+        -webkit-animation-timing-function: ease-in-out;
+        animation-timing-function: ease-in-out;
+      }
+      #demo-3.active {
+        width: 100%;
+      }
+      #demo-3.animation-helper {
+        background: #0c0;
+        -webkit-animation-name: widthAnim;
+        animation-name: widthAnim;
+        -webkit-animation-direction: reverse;
+        animation-direction: reverse;
+      }
+      #demo-3.active.animation-helper {
+        -webkit-animation-name: widthAnim;
+        animation-name: widthAnim;
+        -webkit-animation-direction: normal;
+        animation-direction: normal;
+      }
+    </style>
+    <script>
+      $(function(){
+        $('#demo-3').on('click', function () {
+          $(this).animationHelper(function () {
+            alert('#demo-3 state changed');
+          }).toggleClass('active');
+        });
+      });
+    </script>
+    <div class="demo">
+      <div id="demo-3">Click Me</div>
+    </div>
+  </body>
+</html>

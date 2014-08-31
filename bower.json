@@ -5,7 +5,7 @@
   "authors": [
     "Urszula Ciaputa <urszula@ciaputa.com>"
   ],
-  "description": "Simple jQuery plugin for easy callbacks adding when transition/animation completes",
+  "description": "Tiny jQuery- & Modernizr-dependent plugin helping with simple CSS transitions & animations.",
   "main": "jquery.transitionHelper.js",
   "moduleType": [
     "amd",

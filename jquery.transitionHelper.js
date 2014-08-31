@@ -83,17 +83,24 @@
 			}[ Modernizr.prefixed('animation') ]
 		};
 
-	var helper = function (event, callback, off) {
-		callback = callback || function () {};
-		if (EVENTS[event]){
-			return (off ? this.off : this.on).call(this, EVENTS[event] + '.transitionHelper', function (ev) {
-				//ignore events bubbling from descendants
-				if (ev.target !== this) {
-					return ;
-				}
-				$(this).off(EVENTS[event] + '.transitionHelper').removeClass('transition-helper');
-				callback.call(this, ev);
-			}).toggleClass('transition-helper', !off);
+	var helper = function (type, callback, off) {
+		callback = callback || $.noop;
+		var eventName = type + 'end';
+		var namespacedEvent = EVENTS[eventName] + '.' + type + 'helper';
+		if (EVENTS[eventName]){
+			if (off) {
+				this.off(namespacedEvent);
+			} else {
+				this.on(namespacedEvent, function (ev) {
+					//ignore events bubbling from descendants
+					if (ev.target !== this) {
+						return ;
+					}
+					$(this).off(namespacedEvent).removeClass(type + '-helper');
+					callback.call(this, ev);
+				});
+			}
+			return this.toggleClass(type + '-helper', !off);
 		} else {
 			return this.each(function () {
 				callback.call(this);
@@ -102,11 +109,11 @@
 	};
 
 	$.fn.transitionHelper = function (callback, off) {
-		return helper.call(this, 'transitionend', callback, off);
+		return helper.call(this, 'transition', callback, off);
 	};
 
 	$.fn.animationHelper = function (callback, off) {
-		return helper.call(this, 'animationend', callback, off);
+		return helper.call(this, 'animation', callback, off);
 	};
 
 }));
