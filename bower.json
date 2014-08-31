@@ -1,0 +1,31 @@
+{
+  "name": "transition-helper",
+  "version": "0.4.0",
+  "homepage": "https://github.com/yuijim/transition-helper",
+  "authors": [
+    "Urszula Ciaputa <urszula@ciaputa.com>"
+  ],
+  "description": "Simple jQuery plugin for easy callbacks adding when transition/animation completes",
+  "main": "jquery.transitionHelper.js",
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "transition",
+    "animation"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": ">=2.8.3",
+    "jquery": ">=1.11.1"
+  }
+}
