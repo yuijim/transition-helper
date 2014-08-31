@@ -1,11 +1,11 @@
-/*! jQuery.transitionHelper, v0.3 | MIT */
+/*! jQuery.transitionHelper, v0.4 | MIT */
 /**
  * @fileOverview Micro plugin to help with CSS transitions
  *
  * @copyright Copyright (c) 2013 Urszula Ciaputa (http://urszula.ciaputa.com)
  * @author Urszula Ciaputa <urszula@ciaputa.com>
  *
- * @version 0.1
+ * @version 0.4
  * @license http://www.opensource.org/licenses/mit-license.php
  */
 /*jslint unparam: true, browser: true */
@@ -95,8 +95,9 @@
 				callback.call(this, ev);
 			}).toggleClass('transition-helper', !off);
 		} else {
-			callback.call(this);
-			return this;
+			return this.each(function () {
+				callback.call(this);
+			});
 		}
 	};
 
