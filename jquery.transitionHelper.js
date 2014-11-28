@@ -83,37 +83,60 @@
 			}[ Modernizr.prefixed('animation') ]
 		};
 
-	var helper = function (type, callback, off) {
-		callback = callback || $.noop;
-		var eventName = type + 'end';
-		var namespacedEvent = EVENTS[eventName] + '.' + type + 'helper';
+	var helper = function (options) {
+		var callback = options.callback || $.noop;
+		var eventName = options.type + 'end';
+		var namespacedEvent = EVENTS[eventName] + '.' + options.type + 'helper';
+    var self = this;
+    var timeout;
+
 		if (EVENTS[eventName]){
-			if (off) {
-				this.off(namespacedEvent);
+			if (options.off) {
+				self.off(namespacedEvent);
 			} else {
-				this.on(namespacedEvent, function (ev) {
+				self.on(namespacedEvent, function (ev) {
 					//ignore events bubbling from descendants
 					if (ev.target !== this) {
 						return ;
 					}
-					$(this).off(namespacedEvent).removeClass(type + '-helper');
+
+          clearTimeout(timeout);
+					$(this).off(namespacedEvent).removeClass(options.type + '-helper');
 					callback.call(this, ev);
 				});
 			}
-			return this.toggleClass(type + '-helper', !off);
+      if (options.timeout) {
+        timeout = setTimeout(function() {
+          self.off(namespacedEvent).removeClass(options.type + '-helper');
+          self.each(function () {
+            callback.call(this, null);
+          });
+        }, options.timeout);
+      }
+			return self.toggleClass(options.type + '-helper', !options.off);
 		} else {
-			return this.each(function () {
-				callback.call(this);
+			return self.each(function () {
+				callback.call(this, null);
 			});
 		}
 	};
 
-	$.fn.transitionHelper = function (callback, off) {
-		return helper.call(this, 'transition', callback, off);
+	$.fn.transitionHelper = function (options) {
+    options = options || {};
+    options.type = 'transition';
+    if (typeof options === 'function') {
+      options.callback = arguments[0];
+    }
+    return helper.call(this, options);
 	};
 
-	$.fn.animationHelper = function (callback, off) {
-		return helper.call(this, 'animation', callback, off);
+	$.fn.animationHelper = function (options) {
+    options = options || {};
+    options.type = 'animation';
+    if (typeof options === 'function') {
+      options.callback = arguments[0];
+    }
+		return helper.call(this, options);
 	};
 
 }));
